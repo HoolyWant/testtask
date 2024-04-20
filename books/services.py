@@ -5,11 +5,11 @@ from config.settings import EMAIL_HOST_USER
 
 
 @shared_task
-def mailling(book):
+def mailling(book, emails):
     send_mail(
         "Новая книга!",
         f"На нашем сайте появилась новая книга {book.title} от автора {book.author}",
         EMAIL_HOST_USER,
-        ["to@example.com"],
+        emails,
         fail_silently=False,
     )

@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_celery_beat',
     'django_filters',
     'books'
 
@@ -58,8 +57,15 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
+CACHE_ENABLED = os.getenv('CACHE_ENABLED') is True
+
+if CACHE_ENABLED:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": os.getenv('LOCATION')}
+    }
 
 # URL-адрес брокера сообщений
 CELERY_BROKER_URL = os.getenv('LOCATION')  # Например, Redis, который по умолчанию работает на порту 6379
@@ -77,8 +83,7 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
-CORS_ALLOW_ALL_ORIGINS = False
+CELERY_TIMEZONE = 'Europe/Moscow'
 
 ROOT_URLCONF = 'config.urls'
 
@@ -100,17 +105,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'HOST': 'localhost',
-        'USER': 'postgres',
-        'PASSWORD': os.getenv('PASSWORD_DB'),
+        'NAME': os.getenv('POSTGRES_DB'),
+        'HOST': os.getenv('POSTGRES_HOST'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
     }
 }
 

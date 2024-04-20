@@ -16,7 +16,7 @@ class BookList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(BookList, self).get_context_data(**kwargs)
-        book_filter = BookFilter()
+        book_filter = BookFilter(self.request.GET, queryset=Book.objects.all())
         context['filter'] = book_filter
         return context
 
@@ -24,5 +24,5 @@ class BookList(ListView):
 @receiver(post_save, sender=Book)
 def my_handler(sender, **kwargs):
     if kwargs['created']:
-        mailling.delay(kwargs['instance'], )
+        mailling.delay(kwargs['instance'], 'napoleon.shedr@gmail.com')
 
