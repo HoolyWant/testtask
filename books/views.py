@@ -4,7 +4,8 @@ from django.views.generic import DetailView, ListView
 
 from books.filters import BookFilter
 from books.models import Book
-from books.services import mailling
+from books.tasks import mailling
+from config.settings import MAILLING_EMAILS
 
 
 class BookView(DetailView):
@@ -24,5 +25,5 @@ class BookList(ListView):
 @receiver(post_save, sender=Book)
 def my_handler(sender, **kwargs):
     if kwargs['created']:
-        mailling.delay(kwargs['instance'], 'napoleon.shedr@gmail.com')
+        mailling.delay(kwargs['instance'], MAILLING_EMAILS)
 

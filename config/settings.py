@@ -112,6 +112,7 @@ DATABASES = {
         'HOST': os.getenv('POSTGRES_HOST'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'PORT': '54321'
     }
 }
 
@@ -174,5 +175,7 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 EMAIL_USE_TLS = False
+
+MAILLING_EMAILS = None
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

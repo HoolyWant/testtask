@@ -11,14 +11,15 @@ services:
       postgres-db
     env_file:
       - .env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
     ports:
       - '5432:5432'
     healthcheck:
-      test: [ "CMD-SHELL",'sh -c "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"' ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
-    restart: unless-stopped
 
   django-app:
     build:
@@ -28,9 +29,7 @@ services:
     volumes:
       - .:/code
     ports:
-      - '8000:8008'
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - '8000:8000'
     depends_on:
       postgres-db:
         condition: service_healthy
@@ -39,8 +38,9 @@ services:
       tty: true
       env_file:
         - .env
-      command: celery --app=backend worker --loglevel=info --pool=solo
+      command: sh -c "celery worker --app=core --loglevel=info"
       depends_on:
           - redis
           - django-app
-
+volumes:
+  pg_data:

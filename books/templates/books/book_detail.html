@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'books/base.html'%}
 
-</body>
-</html>
+{% block content %}
+<div class="container">
+    <div class="row text-center">
+        <div class="col-12">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">{{ object.title }}</h4>
+                </div>
+                <div class="card-body">
+                    <p> Автор: {{object.author }}</p>
+                    <p>Дата издания:{{ object.release_date }}</p>
+                    <p>{{ object.description }}</p>
+                     {% if object.image %}
+                    <p>
+                        <img src="/media/{{ object.image }}" class="card-img-top" alt="Card image cap">
+                        </p>
+                     {% else %}
+                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: NoImage" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ object.title }}</text></svg>
+                    {% endif %}
+                    <a class="p-2 btn btn-outline-primary" href='{% url "books:books" %}'>Назад</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
